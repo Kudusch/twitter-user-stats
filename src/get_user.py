@@ -75,11 +75,11 @@ if file_age > (60*60*24*2):
         if tweets:
             n_tweets += len(tweets)
         tw.tweets_to_csv(tweets, f"Data/{user_name}.csv", verbose = False, append=True)
-        print(f"\tRetrieved {n_tweets} tweets", end = "\r")
+        print(f"\tRetrieved {n_tweets} tweets up to {to_date:%Y-%m-%d}", end = "\r")
 else:
     tweet_source = "cache"
     with open(f"Data/{user_name}.csv", "r") as f:
         tweets = csv.reader(f)
         n_tweets = len([t for t in tweets])-1
 
-print(f"\tRetrieved {n_tweets} tweets from {tweet_source}")
+print(f"\tRetrieved {n_tweets} tweets from {tweet_source}        ")

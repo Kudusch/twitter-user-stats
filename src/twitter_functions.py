@@ -33,123 +33,18 @@ request_session.mount("https://", adapter)
 user_dict = {}
 included_tweets_dict = {}
 places_dict = {}
+media_dict = {}
 queried_at = int(datetime.datetime.now().timestamp())
+
+key_names = ["status_id", "created_at", "text", "conversation_id", "hashtags", "mentions", "url_location", "url_unwound", "url_title", "url_description", "url_sensitive", "media_key", "media_type", "media_url", "media_duration", "media_height", "media_width", "media_alt", "geo", "lang", "source", "reply_settings", "retweet_count", "reply_count", "like_count", "quote_count", "is_retweet", "is_reply", "is_quote", "retweeted_user_id", "retweeted_user_screen_name", "retweeted_user_name", "retweeted_user_followers_count", "retweeted_user_following_count", "retweeted_user_tweet_count", "retweeted_user_listed_count", "retweeted_user_protected", "retweeted_user_verified", "retweeted_user_description", "retweeted_tweet_status_id", "retweeted_tweet_conversation_id", "retweeted_tweet_created_at", "retweeted_tweet_lang", "retweeted_tweet_source", "retweeted_tweet_text", "retweeted_tweet_retweet_count", "retweeted_tweet_reply_count", "retweeted_tweet_like_count", "retweeted_tweet_quote_count", "replied_user_id", "replied_user_screen_name", "replied_user_name", "replied_user_followers_count", "replied_user_following_count", "replied_user_tweet_count", "replied_user_listed_count", "replied_user_protected", "replied_user_verified", "replied_user_description", "replied_tweet_status_id", "replied_tweet_conversation_id", "replied_tweet_created_at", "replied_tweet_lang", "replied_tweet_source", "replied_tweet_text", "replied_tweet_retweet_count", "replied_tweet_reply_count", "replied_tweet_like_count", "replied_tweet_quote_count", "quoted_user_id", "quoted_user_screen_name", "quoted_user_name", "quoted_user_followers_count", "quoted_user_following_count", "quoted_user_tweet_count", "quoted_user_listed_count", "quoted_user_protected", "quoted_user_verified", "quoted_user_description", "quoted_tweet_status_id", "quoted_tweet_conversation_id", "quoted_tweet_created_at", "quoted_tweet_lang", "quoted_tweet_source", "quoted_tweet_text", "quoted_tweet_retweet_count", "quoted_tweet_reply_count", "quoted_tweet_like_count", "quoted_tweet_quote_count", "geo_id", "geo_full_name", "geo_name", "geo_country", "geo_country_code", "geo_place_type", "geo_json", "user_id", "screen_name", "name", "account_created_at", "description", "url", "location", "followers_count", "following_count", "tweet_count", "listed_count", "protected", "verified", "queried_at"]
 
 def get_datetime_range(tweets):
     values = [t["created_at"] for t in tweets]
     return(f"created_at from {min(values)} to {max(values)}")
 
 def parse_tweet(raw_tweet):
-    parsed_tweet = {
-        "status_id":"",
-        "created_at":"",
-        "text":"",
-        "conversation_id":"",
-        "hashtags":"",
-        "mentions":"",
-        "url_location":"",
-        "url_unwound":"",
-        "url_title":"",
-        "url_description":"",
-        "url_sensitive":"",
-        "geo":"",
-        "lang":"",
-        "source":"",
-        "reply_settings":"",
-        "retweet_count":"",
-        "reply_count":"",
-        "like_count":"",
-        "quote_count":"",
-        "is_retweet":"",
-        "is_reply":"",
-        "is_quote":"",
-        
-        "retweeted_user_id":"",
-        "retweeted_user_screen_name":"",
-        "retweeted_user_name":"",
-        "retweeted_user_followers_count":"",
-        "retweeted_user_following_count":"",
-        "retweeted_user_tweet_count":"",
-        "retweeted_user_listed_count":"",
-        "retweeted_user_protected":"",
-        "retweeted_user_verified":"",
-        "retweeted_user_description":"",
-        "retweeted_tweet_status_id":"",
-        "retweeted_tweet_conversation_id":"",
-        "retweeted_tweet_created_at":"",
-        "retweeted_tweet_lang":"",
-        "retweeted_tweet_source":"",
-        "retweeted_tweet_text":"",
-        "retweeted_tweet_retweet_count": "",
-        "retweeted_tweet_reply_count": "",
-        "retweeted_tweet_like_count": "",
-        "retweeted_tweet_quote_count": "",
 
-        "replied_user_id":"",
-        "replied_user_screen_name":"",
-        "replied_user_name":"",
-        "replied_user_followers_count":"",
-        "replied_user_following_count":"",
-        "replied_user_tweet_count":"",
-        "replied_user_listed_count":"",
-        "replied_user_protected":"",
-        "replied_user_verified":"",
-        "replied_user_description":"",
-        "replied_tweet_status_id":"",
-        "replied_tweet_conversation_id":"",
-        "replied_tweet_created_at":"",
-        "replied_tweet_lang":"",
-        "replied_tweet_source":"",
-        "replied_tweet_text":"",
-        "replied_tweet_retweet_count": "",
-        "replied_tweet_reply_count": "",
-        "replied_tweet_like_count": "",
-        "replied_tweet_quote_count": "",
-
-        "quoted_user_id":"",
-        "quoted_user_screen_name":"",
-        "quoted_user_name":"",
-        "quoted_user_followers_count":"",
-        "quoted_user_following_count":"",
-        "quoted_user_tweet_count":"",
-        "quoted_user_listed_count":"",
-        "quoted_user_protected":"",
-        "quoted_user_verified":"",
-        "quoted_user_description":"",
-        "quoted_tweet_status_id":"",
-        "quoted_tweet_conversation_id":"",
-        "quoted_tweet_created_at":"",
-        "quoted_tweet_lang":"",
-        "quoted_tweet_source":"",
-        "quoted_tweet_text":"",
-        "quoted_tweet_retweet_count": "",
-        "quoted_tweet_reply_count": "",
-        "quoted_tweet_like_count": "",
-        "quoted_tweet_quote_count": "",
-
-        "geo_id":"",
-        "geo_full_name":"",
-        "geo_name":"",
-        "geo_country":"",
-        "geo_country_code":"",
-        "geo_place_type":"",
-        "geo_json":"",
-
-        "user_id":"",
-        "screen_name":"",
-        "name":"",
-        "account_created_at":"",
-        "description":"",
-        "url":"",
-        "location":"",
-        "followers_count":"",
-        "following_count":"",
-        "tweet_count":"",
-        "listed_count":"",
-        "protected":"",
-        "verified":"",
-        "queried_at":""
-    }
+    parsed_tweet = {key: "" for key in key_names}
 
     parsed_tweet["status_id"] = raw_tweet["id"]
     parsed_tweet["created_at"] = raw_tweet["created_at"]
@@ -204,7 +99,34 @@ def parse_tweet(raw_tweet):
         parsed_tweet["geo_json"] = places_dict[raw_tweet["geo"]["place_id"]]["geo_json"]
     except:
         pass
-    
+
+    # media, needs testing, only the first
+    if "attachments" in raw_tweet.keys():
+        media_keys = []
+        media_types = []
+        media_urls = []
+        media_durations = []
+        media_heights = []
+        media_widths = []
+        media_alts = []
+        for media_key in raw_tweet["attachments"]["media_keys"]:
+            media = media_dict[media_key]
+            media_keys.append(media_key)
+            media_types.append(media["media_type"])
+            media_urls.append(media["media_url"])
+            media_durations.append(media["media_duration"])
+            media_heights.append(media["media_height"])
+            media_widths.append(media["media_width"])
+            media_alts.append(media["media_alt"])
+
+        parsed_tweet["media_key"] = json.dumps(media_keys)
+        parsed_tweet["media_type"] = json.dumps(media_types)
+        parsed_tweet["media_url"] = json.dumps(media_urls)
+        parsed_tweet["media_duration"] = json.dumps(media_durations)
+        parsed_tweet["media_height"] = json.dumps(media_heights)
+        parsed_tweet["media_width"] = json.dumps(media_widths)
+        parsed_tweet["media_alt"] = json.dumps(media_alts)
+
     # BCP47 language tag
     try:
         parsed_tweet["lang"] = raw_tweet["lang"]
@@ -389,27 +311,101 @@ def parse_tweets(r):
                 if not tweet["id"] in included_tweets_dict.keys():
                     included_tweets_dict[tweet["id"]] = {}
                     
-                    included_tweets_dict[tweet["id"]]["conversation_id"] = tweet["conversation_id"]
-                    included_tweets_dict[tweet["id"]]["created_at"] = tweet["created_at"]
-                    included_tweets_dict[tweet["id"]]["lang"] = tweet["lang"]
-                    included_tweets_dict[tweet["id"]]["source"] = tweet["source"]
-                    included_tweets_dict[tweet["id"]]["text"] = tweet["text"]
+                    try:
+                        included_tweets_dict[tweet["id"]]["conversation_id"] = tweet["conversation_id"]
+                    except:
+                        included_tweets_dict[tweet["id"]]["conversation_id"] = ""
 
-                    included_tweets_dict[tweet["id"]]["retweet_count"] = tweet["public_metrics"]["retweet_count"]
-                    included_tweets_dict[tweet["id"]]["reply_count"] = tweet["public_metrics"]["reply_count"]
-                    included_tweets_dict[tweet["id"]]["like_count"] = tweet["public_metrics"]["like_count"]
-                    included_tweets_dict[tweet["id"]]["quote_count"] = tweet["public_metrics"]["quote_count"]
+                    try:
+                        included_tweets_dict[tweet["id"]]["created_at"] = tweet["created_at"]
+                    except:
+                        included_tweets_dict[tweet["id"]]["created_at"] = ""
 
-                    included_tweets_dict[tweet["id"]]["user_id"] = tweet["author_id"]
-                    included_tweets_dict[tweet["id"]]["screen_name"] = user_dict[tweet["author_id"]]["username"]
-                    included_tweets_dict[tweet["id"]]["name"] = user_dict[tweet["author_id"]]["name"]
-                    included_tweets_dict[tweet["id"]]["followers_count"] = user_dict[tweet["author_id"]]["followers_count"]
-                    included_tweets_dict[tweet["id"]]["following_count"] = user_dict[tweet["author_id"]]["following_count"]
-                    included_tweets_dict[tweet["id"]]["tweet_count"] = user_dict[tweet["author_id"]]["tweet_count"]
-                    included_tweets_dict[tweet["id"]]["listed_count"] = user_dict[tweet["author_id"]]["listed_count"]
-                    included_tweets_dict[tweet["id"]]["protected"] = user_dict[tweet["author_id"]]["protected"]
-                    included_tweets_dict[tweet["id"]]["verified"] = user_dict[tweet["author_id"]]["verified"]
-                    included_tweets_dict[tweet["id"]]["description"] = user_dict[tweet["author_id"]]["description"]
+                    try:
+                        included_tweets_dict[tweet["id"]]["lang"] = tweet["lang"]
+                    except:
+                        included_tweets_dict[tweet["id"]]["lang"] = ""
+
+                    try:
+                        included_tweets_dict[tweet["id"]]["source"] = tweet["source"]
+                    except:
+                        included_tweets_dict[tweet["id"]]["source"] = ""
+
+                    try:
+                        included_tweets_dict[tweet["id"]]["text"] = tweet["text"]
+                    except:
+                        included_tweets_dict[tweet["id"]]["text"] = ""
+
+                    try:
+                        included_tweets_dict[tweet["id"]]["retweet_count"] = tweet["public_metrics"]["retweet_count"]
+                    except:
+                        included_tweets_dict[tweet["id"]]["retweet_count"] = ""
+
+                    try:
+                        included_tweets_dict[tweet["id"]]["reply_count"] = tweet["public_metrics"]["reply_count"]
+                    except:
+                        included_tweets_dict[tweet["id"]]["reply_count"] = ""
+
+                    try:
+                        included_tweets_dict[tweet["id"]]["like_count"] = tweet["public_metrics"]["like_count"]
+                    except:
+                        included_tweets_dict[tweet["id"]]["like_count"] = ""
+
+                    try:
+                        included_tweets_dict[tweet["id"]]["quote_count"] = tweet["public_metrics"]["quote_count"]
+                    except:
+                        included_tweets_dict[tweet["id"]]["quote_count"] = ""
+
+                    try:
+                        included_tweets_dict[tweet["id"]]["user_id"] = tweet["author_id"]
+                    except:
+                        included_tweets_dict[tweet["id"]]["user_id"] = ""
+
+                    try:
+                        included_tweets_dict[tweet["id"]]["screen_name"] = user_dict[tweet["author_id"]]["username"]
+                    except:
+                        included_tweets_dict[tweet["id"]]["screen_name"] = ""
+
+                    try:
+                        included_tweets_dict[tweet["id"]]["name"] = user_dict[tweet["author_id"]]["name"]
+                    except:
+                        included_tweets_dict[tweet["id"]]["name"] = ""
+
+                    try:
+                        included_tweets_dict[tweet["id"]]["followers_count"] = user_dict[tweet["author_id"]]["followers_count"]
+                    except:
+                        included_tweets_dict[tweet["id"]]["followers_count"] = ""
+
+                    try:
+                        included_tweets_dict[tweet["id"]]["following_count"] = user_dict[tweet["author_id"]]["following_count"]
+                    except:
+                        included_tweets_dict[tweet["id"]]["following_count"] = ""
+
+                    try:
+                        included_tweets_dict[tweet["id"]]["tweet_count"] = user_dict[tweet["author_id"]]["tweet_count"]
+                    except:
+                        included_tweets_dict[tweet["id"]]["tweet_count"] = ""
+
+                    try:
+                        included_tweets_dict[tweet["id"]]["listed_count"] = user_dict[tweet["author_id"]]["listed_count"]
+                    except:
+                        included_tweets_dict[tweet["id"]]["listed_count"] = ""
+
+                    try:
+                        included_tweets_dict[tweet["id"]]["protected"] = user_dict[tweet["author_id"]]["protected"]
+                    except:
+                        included_tweets_dict[tweet["id"]]["protected"] = ""
+
+                    try:
+                        included_tweets_dict[tweet["id"]]["verified"] = user_dict[tweet["author_id"]]["verified"]
+                    except:
+                        included_tweets_dict[tweet["id"]]["verified"] = ""
+
+                    try:
+                        included_tweets_dict[tweet["id"]]["description"] = user_dict[tweet["author_id"]]["description"]
+                    except:
+                        included_tweets_dict[tweet["id"]]["description"] = ""
+
 
         if "places" in r.json()["includes"].keys():
             for place in r.json()["includes"]["places"]:
@@ -439,6 +435,43 @@ def parse_tweets(r):
                         places_dict[place["id"]]["geo_json"] = json.dumps(place["geo"])
                     except:
                         places_dict[place["id"]]["geo_json"] = ""
+
+        if "media" in r.json()["includes"].keys():
+            for media in r.json()["includes"]["media"]:
+                if not media["media_key"] in media_dict.keys():
+                    media_dict[media["media_key"]] = {}
+
+                    try:
+                        media_dict[media["media_key"]]["media_type"] = media["type"]
+                    except:
+                        media_dict[media["media_key"]]["media_type"] = ""
+
+                    try:
+                        media_dict[media["media_key"]]["media_url"] = media["url"]
+                    except:
+                        media_dict[media["media_key"]]["media_url"] = ""
+
+                    try:
+                        media_dict[media["media_key"]]["media_duration"] = media["duration_ms"]
+                    except:
+                        media_dict[media["media_key"]]["media_duration"] = ""
+
+                    try:
+                        media_dict[media["media_key"]]["media_height"] = media["height"]
+                    except:
+                        media_dict[media["media_key"]]["media_height"] = ""
+
+                    try:
+                        media_dict[media["media_key"]]["media_width"] = media["width"]
+                    except:
+                        media_dict[media["media_key"]]["media_width"] = ""
+
+                    try:
+                        media_dict[media["media_key"]]["media_alt"] = media["alt_text"]
+                    except:
+                        media_dict[media["media_key"]]["media_alt"] = ""
+                    
+                    
 
     parsed_tweets = []
     for tweet in r.json()["data"]:
@@ -572,6 +605,7 @@ def lookup_tweets(tweet_ids, bearer_token, verbose=True):
         ("ids", ",".join(query_ids)),
         ("tweet.fields", "author_id,created_at,conversation_id,text,lang,geo,entities,reply_settings,public_metrics,source,referenced_tweets"),
         ("user.fields", "id,name,username,created_at,description,url,location,protected,verified,public_metrics,entities"),
+        ("media.fields", "media_key,type,url,duration_ms,height,width,alt_text"),
         ("expansions", "referenced_tweets.id,referenced_tweets.id.author_id,in_reply_to_user_id,author_id,attachments.media_keys,entities.mentions.username,geo.place_id")
     )
     
@@ -710,6 +744,7 @@ def search_tweets(query, bearer_token, since_id=None, until_id=None, start_time=
         ("max_results", 500),
         ("tweet.fields", "author_id,created_at,conversation_id,text,lang,geo,entities,reply_settings,public_metrics,source,referenced_tweets"),
         ("user.fields", "id,name,username,created_at,description,url,location,protected,verified,public_metrics,entities"),
+        ("media.fields", "media_key,type,url,duration_ms,height,width,alt_text"),
         ("expansions", "referenced_tweets.id,referenced_tweets.id.author_id,in_reply_to_user_id,author_id,attachments.media_keys,entities.mentions.username,geo.place_id")
     )
 
@@ -727,7 +762,8 @@ def search_tweets(query, bearer_token, since_id=None, until_id=None, start_time=
         params = params + (("start_time", start_time),)
         logging_message.append(f"{start_time=}")
     else:
-        logger.warning(f"No start_time was set. By default, a request will return Tweets from up to 30 days ago if you do not include this parameter.")
+        if not since_id:
+            logger.warning(f"No start_time and no since_id was set. By default, a request will return Tweets from up to 30 days ago if you do not include this parameter.")
 
     if end_time:
         params = params + (("end_time", end_time),)
@@ -795,6 +831,48 @@ def search_tweets(query, bearer_token, since_id=None, until_id=None, start_time=
         logger.setLevel(logging.WARNING)
     return(searched_tweets)
 
+def media_download(queried_tweets, base_path = ".", verbose=False):
+    if verbose and logger.level >= 20:
+        logger.setLevel(logging.INFO)
+
+    if not os.path.exists(f"{base_path}"):
+        logger.warning(f"base_path does not exist, creating {base_path}")
+        os.mkdir(f"{base_path}")
+
+    if queried_tweets:
+        for t in queried_tweets:
+            if t["media_url"] != "":
+                try:
+                    media_keys = json.loads(t['media_key'])
+                    media_urls = json.loads(t['media_url'])
+                    media_types = json.loads(t['media_type'])
+                except:
+                    pass
+                
+                for n, media_key in enumerate(media_keys):
+                    if media_types[n] == "photo":
+                        filename, file_extension = os.path.splitext(media_urls[n])
+                        filename = media_key
+                        if not os.path.exists(f"{base_path}/{filename}{file_extension}"):
+                            try:
+                                r = request_session.get(media_urls[n])
+                            except Exception as e:
+                                logger.error(f"Error downloading media for tweet (Error: {e})")
+
+                            if r.status_code != 200:
+                                logger.error(f"Error downloading media for tweet (Error: {e})")
+                            else:
+                                try:
+                                    with open(f"{base_path}/{filename}{file_extension}", "wb") as f:
+                                        f.write(r.content)
+                                except:
+                                    logger.error(f"Error downloading media for tweet (Error: {e})")   
+    else:
+        logger.warning(f"No tweets to download media")
+
+    if verbose and logger.level >= 20:
+        logger.setLevel(logging.WARNING)
+
 def tweets_to_csv(queried_tweets, file_name, append=False, verbose=False):
     if verbose and logger.level >= 20:
         logger.setLevel(logging.INFO)
@@ -811,323 +889,11 @@ def tweets_to_csv(queried_tweets, file_name, append=False, verbose=False):
         with open(file_name, file_mode, newline='') as f:
             writer = csv.writer(f, dialect="unix")
             if not append:
-                writer.writerow([
-                    "status_id",
-                    "created_at",
-                    "text",
-                    "conversation_id",
-                    "hashtags",
-                    "mentions",
-                    "url_location",
-                    "url_unwound",
-                    "url_title",
-                    "url_description",
-                    "url_sensitive",
-                    "geo",
-                    "lang",
-                    "source",
-                    "reply_settings",
-                    "retweet_count",
-                    "reply_count",
-                    "like_count",
-                    "quote_count",
-                    "is_retweet",
-                    "is_reply",
-                    "is_quote",
-                    "retweeted_user_id",
-                    "retweeted_user_screen_name",
-                    "retweeted_user_name",
-                    "retweeted_user_followers_count",
-                    "retweeted_user_following_count",
-                    "retweeted_user_tweet_count",
-                    "retweeted_user_listed_count",
-                    "retweeted_user_protected",
-                    "retweeted_user_verified",
-                    "retweeted_user_description",
-                    "retweeted_tweet_status_id",
-                    "retweeted_tweet_conversation_id",
-                    "retweeted_tweet_created_at",
-                    "retweeted_tweet_lang",
-                    "retweeted_tweet_source",
-                    "retweeted_tweet_text",
-                    "retweeted_tweet_retweet_count",
-                    "retweeted_tweet_reply_count",
-                    "retweeted_tweet_like_count",
-                    "retweeted_tweet_quote_count",
-                    "replied_user_id",
-                    "replied_user_screen_name",
-                    "replied_user_name",
-                    "replied_user_followers_count",
-                    "replied_user_following_count",
-                    "replied_user_tweet_count",
-                    "replied_user_listed_count",
-                    "replied_user_protected",
-                    "replied_user_verified",
-                    "replied_user_description",
-                    "replied_tweet_status_id",
-                    "replied_tweet_conversation_id",
-                    "replied_tweet_created_at",
-                    "replied_tweet_lang",
-                    "replied_tweet_source",
-                    "replied_tweet_text",
-                    "replied_tweet_retweet_count",
-                    "replied_tweet_reply_count",
-                    "replied_tweet_like_count",
-                    "replied_tweet_quote_count",
-                    "quoted_user_id",
-                    "quoted_user_screen_name",
-                    "quoted_user_name",
-                    "quoted_user_followers_count",
-                    "quoted_user_following_count",
-                    "quoted_user_tweet_count",
-                    "quoted_user_listed_count",
-                    "quoted_user_protected",
-                    "quoted_user_verified",
-                    "quoted_user_description",
-                    "quoted_tweet_status_id",
-                    "quoted_tweet_conversation_id",
-                    "quoted_tweet_created_at",
-                    "quoted_tweet_lang",
-                    "quoted_tweet_source",
-                    "quoted_tweet_text",
-                    "quoted_tweet_retweet_count",
-                    "quoted_tweet_reply_count",
-                    "quoted_tweet_like_count",
-                    "quoted_tweet_quote_count",
-                    "geo_id",
-                    "geo_full_name",
-                    "geo_name",
-                    "geo_country",
-                    "geo_country_code",
-                    "geo_place_type",
-                    "geo_json",
-                    "user_id",
-                    "screen_name",
-                    "name",
-                    "account_created_at",
-                    "description",
-                    "url",
-                    "location",
-                    "followers_count",
-                    "following_count",
-                    "tweet_count",
-                    "listed_count",
-                    "protected",
-                    "verified",
-                    "queried_at"
-                    ])
+                writer.writerow(key_names)
             elif append and os.path.getsize(file_name) == 0:
-                writer.writerow([
-                    "status_id",
-                    "created_at",
-                    "text",
-                    "conversation_id",
-                    "hashtags",
-                    "mentions",
-                    "url_location",
-                    "url_unwound",
-                    "url_title",
-                    "url_description",
-                    "url_sensitive",
-                    "geo",
-                    "lang",
-                    "source",
-                    "reply_settings",
-                    "retweet_count",
-                    "reply_count",
-                    "like_count",
-                    "quote_count",
-                    "is_retweet",
-                    "is_reply",
-                    "is_quote",
-                    "retweeted_user_id",
-                    "retweeted_user_screen_name",
-                    "retweeted_user_name",
-                    "retweeted_user_followers_count",
-                    "retweeted_user_following_count",
-                    "retweeted_user_tweet_count",
-                    "retweeted_user_listed_count",
-                    "retweeted_user_protected",
-                    "retweeted_user_verified",
-                    "retweeted_user_description",
-                    "retweeted_tweet_status_id",
-                    "retweeted_tweet_conversation_id",
-                    "retweeted_tweet_created_at",
-                    "retweeted_tweet_lang",
-                    "retweeted_tweet_source",
-                    "retweeted_tweet_text",
-                    "retweeted_tweet_retweet_count",
-                    "retweeted_tweet_reply_count",
-                    "retweeted_tweet_like_count",
-                    "retweeted_tweet_quote_count",
-                    "replied_user_id",
-                    "replied_user_screen_name",
-                    "replied_user_name",
-                    "replied_user_followers_count",
-                    "replied_user_following_count",
-                    "replied_user_tweet_count",
-                    "replied_user_listed_count",
-                    "replied_user_protected",
-                    "replied_user_verified",
-                    "replied_user_description",
-                    "replied_tweet_status_id",
-                    "replied_tweet_conversation_id",
-                    "replied_tweet_created_at",
-                    "replied_tweet_lang",
-                    "replied_tweet_source",
-                    "replied_tweet_text",
-                    "replied_tweet_retweet_count",
-                    "replied_tweet_reply_count",
-                    "replied_tweet_like_count",
-                    "replied_tweet_quote_count",
-                    "quoted_user_id",
-                    "quoted_user_screen_name",
-                    "quoted_user_name",
-                    "quoted_user_followers_count",
-                    "quoted_user_following_count",
-                    "quoted_user_tweet_count",
-                    "quoted_user_listed_count",
-                    "quoted_user_protected",
-                    "quoted_user_verified",
-                    "quoted_user_description",
-                    "quoted_tweet_status_id",
-                    "quoted_tweet_conversation_id",
-                    "quoted_tweet_created_at",
-                    "quoted_tweet_lang",
-                    "quoted_tweet_source",
-                    "quoted_tweet_text",
-                    "quoted_tweet_retweet_count",
-                    "quoted_tweet_reply_count",
-                    "quoted_tweet_like_count",
-                    "quoted_tweet_quote_count",
-                    "geo_id",
-                    "geo_full_name",
-                    "geo_name",
-                    "geo_country",
-                    "geo_country_code",
-                    "geo_place_type",
-                    "geo_json",
-                    "user_id",
-                    "screen_name",
-                    "name",
-                    "account_created_at",
-                    "description",
-                    "url",
-                    "location",
-                    "followers_count",
-                    "following_count",
-                    "tweet_count",
-                    "listed_count",
-                    "protected",
-                    "verified",
-                    "queried_at"
-                    ])
+                writer.writerow(key_names)
             for parsed_tweet in queried_tweets:
-                writer.writerow([
-                    parsed_tweet["status_id"],
-                    parsed_tweet["created_at"],
-                    parsed_tweet["text"],
-                    parsed_tweet["conversation_id"],
-                    parsed_tweet["hashtags"],
-                    parsed_tweet["mentions"],
-                    parsed_tweet["url_location"],
-                    parsed_tweet["url_unwound"],
-                    parsed_tweet["url_title"],
-                    parsed_tweet["url_description"],
-                    parsed_tweet["url_sensitive"],
-                    parsed_tweet["geo"],
-                    parsed_tweet["lang"],
-                    parsed_tweet["source"],
-                    parsed_tweet["reply_settings"],
-                    parsed_tweet["retweet_count"],
-                    parsed_tweet["reply_count"],
-                    parsed_tweet["like_count"],
-                    parsed_tweet["quote_count"],
-                    parsed_tweet["is_retweet"],
-                    parsed_tweet["is_reply"],
-                    parsed_tweet["is_quote"],
-                    parsed_tweet["retweeted_user_id"],
-                    parsed_tweet["retweeted_user_screen_name"],
-                    parsed_tweet["retweeted_user_name"],
-                    parsed_tweet["retweeted_user_followers_count"],
-                    parsed_tweet["retweeted_user_following_count"],
-                    parsed_tweet["retweeted_user_tweet_count"],
-                    parsed_tweet["retweeted_user_listed_count"],
-                    parsed_tweet["retweeted_user_protected"],
-                    parsed_tweet["retweeted_user_verified"],
-                    parsed_tweet["retweeted_user_description"],
-                    parsed_tweet["retweeted_tweet_status_id"],
-                    parsed_tweet["retweeted_tweet_conversation_id"],
-                    parsed_tweet["retweeted_tweet_created_at"],
-                    parsed_tweet["retweeted_tweet_lang"],
-                    parsed_tweet["retweeted_tweet_source"],
-                    parsed_tweet["retweeted_tweet_text"],
-                    parsed_tweet["retweeted_tweet_retweet_count"],
-                    parsed_tweet["retweeted_tweet_reply_count"],
-                    parsed_tweet["retweeted_tweet_like_count"],
-                    parsed_tweet["retweeted_tweet_quote_count"],
-                    parsed_tweet["replied_user_id"],
-                    parsed_tweet["replied_user_screen_name"],
-                    parsed_tweet["replied_user_name"],
-                    parsed_tweet["replied_user_followers_count"],
-                    parsed_tweet["replied_user_following_count"],
-                    parsed_tweet["replied_user_tweet_count"],
-                    parsed_tweet["replied_user_listed_count"],
-                    parsed_tweet["replied_user_protected"],
-                    parsed_tweet["replied_user_verified"],
-                    parsed_tweet["replied_user_description"],
-                    parsed_tweet["replied_tweet_status_id"],
-                    parsed_tweet["replied_tweet_conversation_id"],
-                    parsed_tweet["replied_tweet_created_at"],
-                    parsed_tweet["replied_tweet_lang"],
-                    parsed_tweet["replied_tweet_source"],
-                    parsed_tweet["replied_tweet_text"],
-                    parsed_tweet["replied_tweet_retweet_count"],
-                    parsed_tweet["replied_tweet_reply_count"],
-                    parsed_tweet["replied_tweet_like_count"],
-                    parsed_tweet["replied_tweet_quote_count"],
-                    parsed_tweet["quoted_user_id"],
-                    parsed_tweet["quoted_user_screen_name"],
-                    parsed_tweet["quoted_user_name"],
-                    parsed_tweet["quoted_user_followers_count"],
-                    parsed_tweet["quoted_user_following_count"],
-                    parsed_tweet["quoted_user_tweet_count"],
-                    parsed_tweet["quoted_user_listed_count"],
-                    parsed_tweet["quoted_user_protected"],
-                    parsed_tweet["quoted_user_verified"],
-                    parsed_tweet["quoted_user_description"],
-                    parsed_tweet["quoted_tweet_status_id"],
-                    parsed_tweet["quoted_tweet_conversation_id"],
-                    parsed_tweet["quoted_tweet_created_at"],
-                    parsed_tweet["quoted_tweet_lang"],
-                    parsed_tweet["quoted_tweet_source"],
-                    parsed_tweet["quoted_tweet_text"],
-                    parsed_tweet["quoted_tweet_retweet_count"],
-                    parsed_tweet["quoted_tweet_reply_count"],
-                    parsed_tweet["quoted_tweet_like_count"],
-                    parsed_tweet["quoted_tweet_quote_count"],
-                    parsed_tweet["geo_id"],
-                    parsed_tweet["geo_full_name"],
-                    parsed_tweet["geo_name"],
-                    parsed_tweet["geo_country"],
-                    parsed_tweet["geo_country_code"],
-                    parsed_tweet["geo_place_type"],
-                    parsed_tweet["geo_json"],
-                    parsed_tweet["user_id"],
-                    parsed_tweet["screen_name"],
-                    parsed_tweet["name"],
-                    parsed_tweet["account_created_at"],
-                    parsed_tweet["description"],
-                    parsed_tweet["url"],
-                    parsed_tweet["location"],
-                    parsed_tweet["followers_count"],
-                    parsed_tweet["following_count"],
-                    parsed_tweet["tweet_count"],
-                    parsed_tweet["listed_count"],
-                    parsed_tweet["protected"],
-                    parsed_tweet["verified"],
-                    parsed_tweet["queried_at"]
-                    ])
+                writer.writerow([parsed_tweet[k] for k in key_names])
     else:
         logger.warning(f"No tweets to write to file")
 
